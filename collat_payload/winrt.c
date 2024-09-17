@@ -429,8 +429,8 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	HSTRING_HEADER header_MessageDialogFactoryHString;
 	HSTRING MessageDialogFactoryHString;
 	hr = WindowsCreateStringReference(
-		InterfaceName_Windows_UI_Popups_IMessageDialogFactory,
-		(UINT32)wcslen(InterfaceName_Windows_UI_Popups_IMessageDialogFactory),
+		RuntimeClass_Windows_UI_Popups_MessageDialog,
+		(UINT32)wcslen(RuntimeClass_Windows_UI_Popups_MessageDialog),
 		&header_MessageDialogFactoryHString,
 		&MessageDialogFactoryHString
 	);
@@ -462,8 +462,8 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	HSTRING_HEADER header_UICommandFactoryHString;
 	HSTRING UICommandFactoryHString;
 	hr = WindowsCreateStringReference(
-		InterfaceName_Windows_UI_Popups_IUICommandFactory,
-		(UINT32)wcslen(InterfaceName_Windows_UI_Popups_IUICommandFactory),
+		RuntimeClass_Windows_UI_Popups_UICommand,
+		(UINT32)wcslen(RuntimeClass_Windows_UI_Popups_UICommand),
 		&header_UICommandFactoryHString,
 		&UICommandFactoryHString
 	);
