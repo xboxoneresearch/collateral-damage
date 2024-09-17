@@ -132,8 +132,6 @@ DEFINE_GUID(UIID_IUICommandFactory,
 	0x54, 0x04, 0x1b, 0xc1, 0x25, 0xe8
 );
 
-#define APP_ID L"XboxOneSystemToasts!Windows.Xbox.SystemToasts.Achievements"
-
 HRESULT create_xml_document_from_string(
 	const wchar_t* xmlString,
 	__x_ABI_CWindows_CData_CXml_CDom_CIXmlDocument** doc
@@ -225,11 +223,13 @@ int WINAPI show_toast()
 		goto exit0;
 	}
 
-	HSTRING_HEADER header_AppIdHString;
+    PCWSTR appId = L"XboxOneSystemToasts!Windows.Xbox.SystemToasts.Achievements";
+
+    HSTRING_HEADER header_AppIdHString;
 	HSTRING AppIdHString;
 	hr = WindowsCreateStringReference(
-		APP_ID,
-		(UINT32)wcslen(APP_ID),
+		appId,
+		(UINT32)wcslen(appId),
 		&header_AppIdHString,
 		&AppIdHString
 	);
