@@ -494,8 +494,8 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	__x_ABI_CWindows_CUI_CPopups_CIMessageDialog* messageDialog;
 	hr = msgDialogFactory->lpVtbl->CreateWithTitle(
 		msgDialogFactory,
-		dialogContent,
-		dialogTitle,
+		DialogContentHString,
+		DialogTitleHString,
 		&messageDialog
 	);
 	if (FAILED(hr))
