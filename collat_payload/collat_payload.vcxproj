@@ -24,6 +24,7 @@
     <ClCompile Include="nt_offsets.c" />
     <ClCompile Include="post_exploit.c" />
     <ClCompile Include="winrt.c" />
+    <ClCompile Include="impersonate.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ioring.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="post_exploit.h" />
     <ClInclude Include="win_defs.h" />
     <ClInclude Include="winrt.h" />
+    <ClInclude Include="impersonate.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="prefetch_asm.asm" />

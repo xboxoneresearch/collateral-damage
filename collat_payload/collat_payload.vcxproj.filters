@@ -30,6 +30,9 @@
     <ClCompile Include="winrt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="impersonate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="win_defs.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="winrt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="impersonate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
