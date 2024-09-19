@@ -220,7 +220,7 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoInitialize\n", __FUNCTION__, __LINE__);
-		goto exit0;
+		goto exit;
 	}
 
     PCWSTR appId = L"XboxOneSystemToasts!Windows.Xbox.SystemToasts.Achievements";
@@ -236,12 +236,12 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 	if (AppIdHString == NULL)
 	{
 		hr = E_POINTER;
-		goto exit1;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CData_CXml_CDom_CIXmlDocument* inputXml = NULL;
@@ -261,7 +261,7 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: CreateXmlDocumentFromString\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_ToastNotificationManagerHString;
@@ -275,13 +275,13 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit2;
+		goto exit;
 	}
 	if (ToastNotificationManagerHString == NULL)
 	{
 		printf("%s:%d:: ToastNotificationManagerHString == NULL\n", __FUNCTION__, __LINE__);
 		hr = E_POINTER;
-		goto exit2;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CUI_CNotifications_CIToastNotificationManagerStatics* toastStatics = NULL;
@@ -293,10 +293,10 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoGetActivationFactory\n", __FUNCTION__, __LINE__);
-		goto exit2;
+		goto exit;
 	}
 
-	__x_ABI_CWindows_CUI_CNotifications_CIToastNotifier* notifier;
+	__x_ABI_CWindows_CUI_CNotifications_CIToastNotifier* notifier = NULL;
 	hr = toastStatics->lpVtbl->CreateToastNotifierWithId(
 		toastStatics,
 		AppIdHString,
@@ -305,7 +305,7 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: CreateToastNotifierWithId\n", __FUNCTION__, __LINE__);
-		goto exit3;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_ToastNotificationHString;
@@ -319,13 +319,13 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit4;
+		goto exit;
 	}
 	if (ToastNotificationHString == NULL)
 	{
 		printf("%s:%d:: ToastNotificationHString == NULL\n", __FUNCTION__, __LINE__);
 		hr = E_POINTER;
-		goto exit4;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CUI_CNotifications_CIToastNotificationFactory* notifFactory = NULL;
@@ -337,7 +337,7 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoGetActivationFactory\n", __FUNCTION__, __LINE__);
-		goto exit4;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CUI_CNotifications_CIToastNotification* toast = NULL;
@@ -345,14 +345,14 @@ int WINAPI show_toast()
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: CreateToastNotification\n", __FUNCTION__, __LINE__);
-		goto exit5;
+		goto exit;
 	}
 
 	hr = notifier->lpVtbl->Show(notifier, toast);
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: Show\n", __FUNCTION__, __LINE__);
-		goto exit6;
+		goto exit;
 	}
 
 	// We have to wait a bit for the COM threads to deliver the notification
@@ -360,19 +360,19 @@ int WINAPI show_toast()
 	// Don't know any better, yielding (Sleep(0)) is not enough
 	Sleep(1);
 
-exit6:
-	toast->lpVtbl->Release(toast);
-exit5:
-	notifFactory->lpVtbl->Release(notifFactory);
-exit4:
-	notifier->lpVtbl->Release(notifier);
-exit3:
-	toastStatics->lpVtbl->Release(toastStatics);
-exit2:
-	inputXml->lpVtbl->Release(inputXml);
-exit1:
+exit:
+	if (toast)
+		toast->lpVtbl->Release(toast);
+	if (notifFactory)
+		notifFactory->lpVtbl->Release(notifFactory);
+	if (notifier)
+		notifier->lpVtbl->Release(notifier);
+	if (toastStatics)
+		toastStatics->lpVtbl->Release(toastStatics);
+	if (inputXml)
+		inputXml->lpVtbl->Release(inputXml);
+
 	RoUninitialize();
-exit0:
 	Done(hr);
 }
 
@@ -384,7 +384,7 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoInitialize\n", __FUNCTION__, __LINE__);
-		goto exit0;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_DialogTitleHString;
@@ -398,12 +398,12 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 	if (DialogTitleHString == NULL)
 	{
 		hr = E_POINTER;
-		goto exit1;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_DialogContentHString;
@@ -417,12 +417,12 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 	if (DialogContentHString == NULL)
 	{
 		hr = E_POINTER;
-		goto exit1;
+		goto exit;
 	}
 
 	/* IMessageDialogFactory */
@@ -437,13 +437,13 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 	if (MessageDialogFactoryHString == NULL)
 	{
 		printf("%s:%d:: MessageDialogFactoryHString == NULL\n", __FUNCTION__, __LINE__);
 		hr = E_POINTER;
-		goto exit1;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CUI_CPopups_CIMessageDialogFactory* msgDialogFactory = NULL;
@@ -455,7 +455,7 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoGetActivationFactory\n", __FUNCTION__, __LINE__);
-		goto exit1;
+		goto exit;
 	}
 
 	/* IUICommandFactory*/
@@ -470,13 +470,13 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit2;
+		goto exit;
 	}
 	if (UICommandFactoryHString == NULL)
 	{
 		printf("%s:%d:: MessageDialogFactoryHString == NULL\n", __FUNCTION__, __LINE__);
 		hr = E_POINTER;
-		goto exit2;
+		goto exit;
 	}
 
 	__x_ABI_CWindows_CUI_CPopups_CIUICommandFactory* uiCommandFactory = NULL;
@@ -488,10 +488,10 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: RoGetActivationFactory\n", __FUNCTION__, __LINE__);
-		goto exit2;
+		goto exit;
 	}
 
-	__x_ABI_CWindows_CUI_CPopups_CIMessageDialog* messageDialog;
+	__x_ABI_CWindows_CUI_CPopups_CIMessageDialog* messageDialog = NULL;
 	hr = msgDialogFactory->lpVtbl->CreateWithTitle(
 		msgDialogFactory,
 		DialogContentHString,
@@ -501,15 +501,15 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: CreateWithTitle\n", __FUNCTION__, __LINE__);
-		goto exit3;
+		goto exit;
 	}
 
-	__FIVector_1_Windows__CUI__CPopups__CIUICommand* commandsVec;
+	__FIVector_1_Windows__CUI__CPopups__CIUICommand* commandsVec = NULL;
 	hr = messageDialog->lpVtbl->get_Commands(messageDialog, &commandsVec);
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: get_Commands\n", __FUNCTION__, __LINE__);
-		goto exit4;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_RebootCommandHString;
@@ -523,20 +523,20 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit5;
+		goto exit;
 	}
 	if (RebootCommandHString == NULL)
 	{
 		hr = E_POINTER;
-		goto exit5;
+		goto exit;
 	}
 
-	__x_ABI_CWindows_CUI_CPopups_CIUICommand* rebootCommand;
+	__x_ABI_CWindows_CUI_CPopups_CIUICommand* rebootCommand = NULL;
 	uiCommandFactory->lpVtbl->Create(uiCommandFactory, RebootCommandHString, &rebootCommand);
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: uiCommandFactory->Create (reboot)\n", __FUNCTION__, __LINE__);
-		goto exit5;
+		goto exit;
 	}
 
 	HSTRING_HEADER header_ContinueCommandHString;
@@ -550,26 +550,26 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: WindowsCreateStringReference\n", __FUNCTION__, __LINE__);
-		goto exit6;
+		goto exit;
 	}
 	if (ContinueCommandHString == NULL)
 	{
 		hr = E_POINTER;
-		goto exit6;
+		goto exit;
 	}
 
-	__x_ABI_CWindows_CUI_CPopups_CIUICommand* continueCommand;
+	__x_ABI_CWindows_CUI_CPopups_CIUICommand* continueCommand = NULL;
 	uiCommandFactory->lpVtbl->Create(uiCommandFactory, ContinueCommandHString, &continueCommand);
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: uiCommandFactory->Create (continue)\n", __FUNCTION__, __LINE__);
-		goto exit6;
+		goto exit;
 	}
 
 	commandsVec->lpVtbl->Append(commandsVec, rebootCommand);
 	commandsVec->lpVtbl->Append(commandsVec, continueCommand);
 
-	__FIAsyncOperation_1_Windows__CUI__CPopups__CIUICommand* uiCommand;
+	__FIAsyncOperation_1_Windows__CUI__CPopups__CIUICommand* uiCommand = NULL;
 	hr = messageDialog->lpVtbl->ShowAsync(
 		messageDialog,
 		&uiCommand
@@ -577,15 +577,15 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: ShowAsync\n", __FUNCTION__, __LINE__);
-		goto exit7;
+		goto exit;
 	}
 
-	__x_ABI_CWindows_CUI_CPopups_CIUICommand* chosenCommand;
+	__x_ABI_CWindows_CUI_CPopups_CIUICommand* chosenCommand = NULL;
 	hr = uiCommand->lpVtbl->GetResults(uiCommand, &chosenCommand);
 	if (FAILED(hr))
 	{
 		printf("%s:%d:: GetResults\n", __FUNCTION__, __LINE__);
-		goto exit8;
+		goto exit;
 	}
 
 
@@ -593,24 +593,24 @@ int WINAPI show_message_dialog(PCWSTR dialogTitle, PCWSTR dialogContent)
 
 	// TODO: Do reboot
 
-	chosenCommand->lpVtbl->Release(chosenCommand);
-	
-	exit8:
+exit:
+	if (chosenCommand)
+		chosenCommand->lpVtbl->Release(chosenCommand);
+	if (uiCommand)
 		uiCommand->lpVtbl->Release(uiCommand);
-	exit7:
+	if (continueCommand)
 		continueCommand->lpVtbl->Release(continueCommand);
-	exit6:
+	if (rebootCommand)
 		rebootCommand->lpVtbl->Release(rebootCommand);
-	exit5:
+	if (commandsVec)
 		commandsVec->lpVtbl->Release(commandsVec);
-	exit4:
+	if (messageDialog)
 		messageDialog->lpVtbl->Release(messageDialog);
-	exit3:
+	if (uiCommandFactory)
 		uiCommandFactory->lpVtbl->Release(uiCommandFactory);
-	exit2:
+	if (msgDialogFactory)
 		msgDialogFactory->lpVtbl->Release(msgDialogFactory);
-	exit1:
-		RoUninitialize();
-	exit0:
-		Done(hr);
+
+	RoUninitialize();
+	return Done(hr);
 }
