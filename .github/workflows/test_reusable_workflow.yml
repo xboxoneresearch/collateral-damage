@@ -8,5 +8,5 @@ permissions:
 
 jobs:
   build_workflow:
-    uses: ./solstice/.github/workflows/build.yml
+    uses: XboxOneResearch/solstice/.github/workflows/build.yml@ci/reusable_workflow
 
