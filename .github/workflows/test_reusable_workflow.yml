@@ -1,0 +1,12 @@
+name: Test reusable workflow
+
+on:
+  push:
+
+permissions:
+    contents: write
+
+jobs:
+  build_workflow:
+    uses: ./solstice/.github/workflows/build.yml
+
